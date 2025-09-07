@@ -7,11 +7,10 @@ settings:
 importers:
 
   .:
-    dependencies:
+    devDependencies:
       '@solidjs/meta':
         specifier: ^0.29.4
         version: 0.29.4(solid-js@1.8.17)
-    devDependencies:
       '@types/node':
         specifier: ^20.12.12
         version: 20.12.12
