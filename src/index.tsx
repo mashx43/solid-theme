@@ -12,7 +12,6 @@ import {
 import { attrStrategy } from './attr'
 import { classStrategy } from './class'
 import { createLocalStorage, THEME_STORAGE_KEY } from './local-storage'
-import { isServer } from 'solid-js/web'
 import type { ThemeStrategy } from './types'
 
 const INITIAL_THEME = 'system'
@@ -35,15 +34,13 @@ export function ThemeProvider(props: {
   const { changeTheme, createScript, removeTheme }: ThemeStrategy =
     props.method === 'attr' ? attrStrategy : classStrategy
 
-  if (!isServer) {
-    const script = createScript()
-    useHead({
-      tag: 'script',
-      setting: { close: true },
-      id: createUniqueId(),
-      props: { children: script },
-    })
-  }
+  const script = createScript()
+  useHead({
+    tag: 'script',
+    setting: { close: true },
+    id: createUniqueId(),
+    props: { children: script },
+  })
 
   const [theme, setTheme] = createLocalStorage(THEME_STORAGE_KEY, INITIAL_THEME)
 

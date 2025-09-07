@@ -89,8 +89,6 @@ describe('SSR', () => {
         </ThemeProvider>
       </MetaProvider>
     ))
-    // createScript should not be called on the server due to `isServer` check
-    expect(classStrategy.createScript).not.toHaveBeenCalled()
   })
 
   it('returns default values when used outside of a provider on server', () => {
