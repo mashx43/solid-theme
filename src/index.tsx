@@ -1,26 +1,69 @@
-import { Accessor, Component, createComputed, createSignal } from 'solid-js'
+import { useHead } from '@solidjs/meta'
+import {
+  type Accessor,
+  createContext,
+  createEffect,
+  createMemo,
+  createUniqueId,
+  type JSX,
+  type Setter,
+  useContext,
+} from 'solid-js'
+import { attrStrategy } from './attr'
+import { classStrategy } from './class'
+import { createLocalStorage, THEME_STORAGE_KEY } from './local-storage'
+import { isServer } from 'solid-js/web'
+import type { ThemeStrategy } from './types'
 
-export function createHello(): [Accessor<string>, (to: string) => void] {
-  const [hello, setHello] = createSignal('Hello World!')
+const INITIAL_THEME = 'system'
 
-  return [hello, (to: string) => setHello(`Hello ${to}!`)]
-}
+const context = createContext<{
+  themes: string[]
+  theme: Accessor<string>
+  setTheme: Setter<string>
+}>({
+  themes: [],
+  theme: () => INITIAL_THEME,
+  setTheme: () => {},
+})
 
-export const Hello: Component<{ to?: string }> = props => {
-  const [hello, setHello] = createHello()
+export function ThemeProvider(props: {
+  themes: string[]
+  method: 'attr' | 'class'
+  children: JSX.Element
+}): JSX.Element {
+  const { changeTheme, createScript, removeTheme }: ThemeStrategy =
+    props.method === 'attr' ? attrStrategy : classStrategy
 
-  // Console calls will be removed in production if `dropConsole` is enabled
+  if (!isServer) {
+    const script = createScript()
+    useHead({
+      tag: 'script',
+      setting: { close: true },
+      id: createUniqueId(),
+      props: { children: script },
+    })
+  }
 
-  // eslint-disable-next-line no-console
-  console.log('Hello World!')
+  const [theme, setTheme] = createLocalStorage(THEME_STORAGE_KEY, INITIAL_THEME)
 
-  createComputed(() => {
-    if (typeof props.to === 'string') setHello(props.to)
+  createEffect(() => {
+    if (theme() === 'system') {
+      removeTheme(props.themes)
+      return
+    }
+    changeTheme(theme(), props.themes)
   })
 
+  const allThemes = createMemo(() => Array.from(new Set([...props.themes, 'system'])))
+
   return (
-    <>
-      <div>{hello()}</div>
-    </>
+    <context.Provider value={{ themes: allThemes(), theme, setTheme }}>
+      {props.children}
+    </context.Provider>
   )
+}
+
+export function useTheme() {
+  return useContext(context)
 }

@@ -1,21 +1,24 @@
 {
-  "name": "{{name_of_lib}}",
+  "name": "@mash43/solid-theme",
   "version": "0.0.0",
-  "description": "{{desc_of_lib}}",
+  "description": "A theme for SolidJS applications.",
   "license": "MIT",
-  "author": "{{me}}",
+  "author": "mash43",
   "contributors": [],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/{{me}}/{{name_of_lib}}.git"
+    "url": "git+https://github.com/mashx43/solid-theme.git"
   },
-  "homepage": "https://github.com/{{me}}/{{name_of_lib}}#readme",
+  "homepage": "https://github.com/mashx43/solid-theme#readme",
   "bugs": {
-    "url": "https://github.com/{{me}}/{{name_of_lib}}/issues"
+    "url": "https://github.com/mashx43/solid-theme/issues"
   },
   "files": [
     "dist"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "private": false,
   "sideEffects": false,
   "type": "module",
@@ -49,14 +52,16 @@
     "prepublishOnly": "pnpm build",
     "format": "prettier --ignore-path .gitignore -w \"src/**/*.{js,ts,json,css,tsx,jsx}\" \"dev/**/*.{js,ts,json,css,tsx,jsx}\"",
     "lint": "concurrently pnpm:lint:*",
-    "lint:code": "eslint --ignore-path .gitignore --max-warnings 0 src/**/*.{js,ts,tsx,jsx}",
+    "lint:code": "eslint --ignore-path .gitignore --max-warnings 0 src/**/*.{ts,tsx}",
     "lint:types": "tsc --noEmit",
     "update-deps": "pnpm up -Li"
   },
   "peerDependencies": {
+    "@solidjs/meta": "^0.28.0",
     "solid-js": "^1.6.0"
   },
   "devDependencies": {
+    "@solidjs/meta": "^0.29.4",
     "@types/node": "^20.12.12",
     "@typescript-eslint/eslint-plugin": "^7.9.0",
     "@typescript-eslint/parser": "^7.9.0",

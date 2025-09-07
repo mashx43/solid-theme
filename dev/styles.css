@@ -9,3 +9,31 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
+
+/* Light Mode */
+@media (prefers-color-scheme: light) {
+  html {
+    color: black;
+    background-color: white;
+  }
+}
+
+[data-theme='light'],
+.light {
+  color: black;
+  background-color: white;
+}
+
+/* Dark Mode */
+@media (prefers-color-scheme: dark) {
+  html {
+    color: white;
+    background-color: #282c34;
+  }
+}
+
+[data-theme='dark'],
+.dark {
+  color: white;
+  background-color: #282c34;
+}
